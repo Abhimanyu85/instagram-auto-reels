@@ -34,7 +34,7 @@ jobs:
 
     - name: Verify Template Image Exists
       run: |
-        if [! -f "template.jpg" ]; then
+        if [ ! -f "template.jpg" ]; then
           echo "ERROR: template.jpg is missing from the repository root!"
           exit 1
         fi
