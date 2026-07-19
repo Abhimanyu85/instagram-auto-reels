@@ -15,10 +15,9 @@ try:
     print(f"News mili: {title}")
 
     print("2. Video bana raha hun...")
-    # Yahan pehle template check hoga
     img = ImageClip("template.jpg").set_duration(8)
 
-    # Hindi support ke liye font
+    # Hindi text ke liye font
     txt = TextClip(title, fontsize=55, color='white', size=(1000,1920), method='caption', font='DejaVu-Sans-Bold')
     txt = txt.set_position('center').set_duration(8)
 
