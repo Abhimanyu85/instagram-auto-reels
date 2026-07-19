@@ -1,19 +1,31 @@
 name: Instagram Auto Post
+
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 */6 * * *' # Har 6 ghante me auto
 
 jobs:
   post-reel:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Code download karo
+        uses: actions/checkout@v4
+
+      - name: Python set karo
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
-      - run: pip install instagrapi gnews requests moviepy
-      - env:
+
+      - name: FFMPEG install karo - video ke liye
+        run: sudo apt-get install -y ffmpeg
+
+      - name: Python package install karo
+        run: pip install instagrapi gnews requests moviepy
+
+      - name: Reel upload karo
+        env:
           IG_USERNAME: ${{ secrets.IG_USERNAME }}
           IG_PASSWORD: ${{ secrets.IG_PASSWORD }}
         run: python main.py
