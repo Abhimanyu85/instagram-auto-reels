@@ -1,0 +1,7 @@
+instagrapi
+requests
+python-dotenv
+opencv-python
+moviepy
+Pillow
+gnews
