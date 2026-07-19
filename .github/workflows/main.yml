@@ -1,9 +1,9 @@
 name: Auto Instagram Reels
 
 on:
-  workflow_dispatch: # Manual run
+  workflow_dispatch:
   schedule:
-    - cron: '0 9 * * *' # Roz 9:00 AM UTC = 2:30 PM IST
+    - cron: '0 9 * * *'
 
 jobs:
   build-and-run:
@@ -32,7 +32,7 @@ jobs:
 
     - name: Verify Template Image Exists
       run: |
-        if [! -f "template.jpg" ]; then
+        if [ ! -f "template.jpg" ]; then
           echo "ERROR: template.jpg is missing from the repository root!"
           exit 1
         fi
