@@ -1,5 +1,5 @@
 import os
-import random
+import time
 from instagrapi import Client
 from gnews import GNews
 from moviepy.editor import *
@@ -23,15 +23,23 @@ try:
     reel = CompositeVideoClip([img, txt])
     reel.write_videofile("reel.mp4", fps=24, codec="libx264")
 
-    # 3. Khud Upload karega
+    # 3. Khud Upload karega - Device setting ke sath
     print("Instagram pe upload kar raha hun...")
     cl = Client()
+
+    # Ye 4 line nayi add ki hain - Insta ko lagega real phone hai
+    cl.set_country_code(91)
+    cl.set_locale("hi_IN")
+    cl.set_timezone_offset(-18000) # IST time
+    cl.delay_range = [2, 5] # Human jaisa delay
+
     cl.login(IG_USERNAME, IG_PASSWORD)
-    cl.clip_upload(
+
+    media = cl.clip_upload(
         path="reel.mp4",
         caption=f"{title}\n\n#news #trending #india #vibehub"
     )
-    print("✅ Reel Upload Ho Gayi!")
+    print(f"✅ Reel Upload Ho Gayi! Media ID: {media.id}")
 
 except Exception as e:
     print(f"❌ Error: {e}")
