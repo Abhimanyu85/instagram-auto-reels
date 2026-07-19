@@ -34,7 +34,7 @@ jobs:
 
     - name: Verify Template Image Exists
       run: |
-        if [ ! -f "template.jpg" ]; then
+        if [! -f "template.jpg" ]; then
           echo "ERROR: template.jpg is missing from the repository root!"
           exit 1
         fi
@@ -44,3 +44,10 @@ jobs:
         IG_USERNAME: ${{ secrets.IG_USERNAME }}
         IG_PASSWORD: ${{ secrets.IG_PASSWORD }}
       run: python main.py
+
+    - name: Upload Session File
+      uses: actions/upload-artifact@v4
+      with:
+        name: insta-session
+        path: session.json
+        if-no-files-found: ignore
