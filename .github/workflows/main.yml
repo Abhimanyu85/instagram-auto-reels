@@ -1,1 +1,39 @@
+name: Auto Instagram Reels
 
+on:
+  workflow_dispatch: # Allows you to run this manually from GitHub
+  schedule:
+    - cron: '0 9 * * *' # Runs automatically every day at 9:00 AM UTC (2:30 PM IST)
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip' # Speeds up future runs
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install Pillow PySocks annotated-types beautifulsoup4 certifi charset_normalizer decorator dnspython feedparser gnews idna imageio imageio_ffmpeg instagrapi moviepy numpy proglog pycryptodomex pydantic pydantic-core requests sgmllib3k soupsieve tqdm typing-extensions typing-inspection urllib3
+
+    - name: Verify Template Image Exists
+      run: |
+        if [ ! -f "template.jpg" ]; then
+          echo "ERROR: template.jpg is missing from the repository root!"
+          exit 1
+        fi
+
+    - name: Run Automation Script
+      env:
+        # Pass your Instagram credentials securely from GitHub Secrets
+        IG_USERNAME: ${{ secrets.IG_USERNAME }}
+        IG_PASSWORD: ${{ secrets.IG_PASSWORD }}
+      run: python main.py
