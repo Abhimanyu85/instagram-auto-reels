@@ -6,6 +6,7 @@ from moviepy.editor import *
 
 IG_USERNAME = os.getenv("IG_USERNAME")
 IG_PASSWORD = os.getenv("IG_PASSWORD")
+SESSION_FILE = "session.json"
 
 try:
     print("1. News le raha hun...")
@@ -17,7 +18,7 @@ try:
     print("2. Video bana raha hun...")
     img = ImageClip("template.jpg").set_duration(8)
 
-    # Hindi text ke liye font
+    # Hindi text ke liye
     txt = TextClip(title, fontsize=55, color='white', size=(1000,1920), method='caption', font='DejaVu-Sans-Bold')
     txt = txt.set_position('center').set_duration(8)
 
@@ -30,7 +31,14 @@ try:
     cl.set_country_code(91)
     cl.set_locale("hi_IN")
     cl.set_timezone_offset(-18000)
+
+    # Session load karo agar hai to
+    if os.path.exists(SESSION_FILE):
+        cl.load_settings(SESSION_FILE)
+        print("Purana session load kiya")
+
     cl.login(IG_USERNAME, IG_PASSWORD)
+    cl.dump_settings(SESSION_FILE) # Session save kar do agli baar ke liye
     print(f"Login ho gaya: {cl.username}")
 
     media = cl.clip_upload(
