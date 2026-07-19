@@ -1,5 +1,6 @@
 import os
 import traceback
+import time
 from instagrapi import Client
 from gnews import GNews
 from moviepy.editor import *
@@ -17,11 +18,8 @@ try:
 
     print("2. Video bana raha hun...")
     img = ImageClip("template.jpg").set_duration(8)
-
-    # Hindi text ke liye
     txt = TextClip(title, fontsize=55, color='white', size=(1000,1920), method='caption', font='DejaVu-Sans-Bold')
     txt = txt.set_position('center').set_duration(8)
-
     reel = CompositeVideoClip([img, txt])
     reel.write_videofile("reel.mp4", fps=24, codec="libx264")
     print("Video ban gayi: reel.mp4")
@@ -31,14 +29,15 @@ try:
     cl.set_country_code(91)
     cl.set_locale("hi_IN")
     cl.set_timezone_offset(-18000)
+    cl.delay_range = [2, 5] # Human jaisa delay
 
-    # Session load karo agar hai to
+    # Session load karo
     if os.path.exists(SESSION_FILE):
         cl.load_settings(SESSION_FILE)
         print("Purana session load kiya")
 
     cl.login(IG_USERNAME, IG_PASSWORD)
-    cl.dump_settings(SESSION_FILE) # Session save kar do agli baar ke liye
+    cl.dump_settings(SESSION_FILE)
     print(f"Login ho gaya: {cl.username}")
 
     media = cl.clip_upload(
