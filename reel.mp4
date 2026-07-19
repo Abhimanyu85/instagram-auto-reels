@@ -1,0 +1,24 @@
+import os
+from instagrapi import Client
+from gnews import GNews
+
+IG_USERNAME = os.getenv("IG_USERNAME")
+IG_PASSWORD = os.getenv("IG_PASSWORD")
+GNEWS_KEY = os.getenv("GNEWS_KEY")
+
+# 1. News lena
+google_news = GNews(language='hi', country='IN', max_results=1)
+news = google_news.get_news('trending')
+title = news[0]['title']
+
+# 2. Login
+cl = Client()
+cl.login(IG_USERNAME, IG_PASSWORD)
+
+# 3. Reel upload - pehle repo me reel.mp4 daalna padega
+cl.clip_upload(
+    path="reel.mp4",
+    caption=f"{title}\n\n#news #trending #vibehub"
+)
+
+print("Reel upload ho gayi!")
