@@ -1,31 +1,29 @@
-name: Auto Upload Instagram Reels
+import os
+from instagrapi import Client
+from gnews import GNews
+import requests
+import random
 
-on:
-  schedule:
-    - cron: '0 5 * * *'   # 10:30 AM IST
-    - cron: '30 8 * * *'  # 2:00 PM IST  
-    - cron: '0 12 * * *'  # 5:30 PM IST
-    - cron: '30 15 * * *' # 9:00 PM IST
-    - cron: '0 18 * * *'  # 11:30 PM IST
-  workflow_dispatch:
+IG_USERNAME = os.getenv("IG_USERNAME")
+IG_PASSWORD = os.getenv("IG_PASSWORD")
+GNEWS_KEY = os.getenv("GNEWS_KEY")
 
-jobs:
-  upload:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Code Download
-        uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-      - name: Install FFmpeg
-        run: sudo apt-get update && sudo apt-get install ffmpeg -y
-      - name: Install Python Packages
-        run: pip install -r requirements.txt
-      - name: Run Instagram Bot
-        run: python insta_bot.py
-        env:
-          GNEWS_KEY: ${{ secrets.GNEWS_KEY }}
-          IG_USERNAME: ${{ secrets.IG_USERNAME }}
-          IG_PASSWORD: ${{ secrets.IG_PASSWORD }}
+# 1. News lena
+google_news = GNews(language='hi', country='IN', max_results=1)
+news = google_news.get_news('trending')
+title = news[0]['title']
+url = news[0]['url']
+
+# 2. Login
+cl = Client()
+cl.login(IG_USERNAME, IG_PASSWORD)
+
+# 3. Reel upload - yahan tumhara video/image ka path dena hai
+# Abhi demo ke liye text reel
+cl.clip_upload(
+    path="reel.mp4", # is jagah apni video ka naam
+    caption=f"{title}\n\n#news #trending #vibehub",
+    extra_data={"custom_accessibility_caption": title}
+)
+
+print("Reel upload ho gayi!")
